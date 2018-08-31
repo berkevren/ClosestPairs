@@ -1,0 +1,5 @@
+The algorithm creates a 2D Float array by reading a TSV file. All the values in a single line are added to the array. If the file contains 100 lines and each line contains 5 numbers, then a [100][5] array is created. Max number of lines is 2000 which can be changed.
+There is a special case for points in two dimensions where the running time is O(nlogn).
+For all other dimensions, the running time is O(n^2m) where n is the number of lines and m is the number of dimensions.
+To use, the address of the file to be read should be put into the source code.
+The program assumes there are no blank lines, all values are separated by tabs and the points are 2 dimensional or higher.
