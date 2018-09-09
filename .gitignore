@@ -1,0 +1,5 @@
+#ignore idea files
+*.idea
+#ignore log files
+*.log
+Comments.txt

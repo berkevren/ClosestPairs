@@ -1,11 +1,11 @@
 //package com.mkyong.csv;
 
 import java.awt.geom.Point2D;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Scanner;
+import java.util.logging.*;
 
 public class TaskManager implements Comparator<Point2D.Float> {
 
@@ -13,6 +13,10 @@ public class TaskManager implements Comparator<Point2D.Float> {
     private Point2D best1, best2;
     private static int bestMultiPoint1, bestMultiPoint2;
     private double bestDistance = Double.POSITIVE_INFINITY;
+
+    private static String fileName = "";
+
+    static Logger lg;
 
     public TaskManager(Point2D[] points) {
 
@@ -132,9 +136,9 @@ public class TaskManager implements Comparator<Point2D.Float> {
     }
 
     // is v < w ?
-    private static boolean less(Comparable v, Comparable w) {
+    /*private static boolean less(Point2D v, Point2D w) {
         return v.compareTo(w) < 0;
-    }
+    } */
 
     // stably merge a[lo .. mid] with a[mid+1 ..hi] using aux[lo .. hi]
     // precondition: a[lo .. mid] and a[mid+1 .. hi] are sorted subarrays
@@ -165,12 +169,40 @@ public class TaskManager implements Comparator<Point2D.Float> {
      *
      * @param args the command-line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        Float[][] points = tsvToArray("/Users/berkabbasoglu/Downloads/sample_in_out/sample_input_2_8.tsv");
+        //logger
+        lg = Logger.getLogger(TaskManager.class.getName());
+
+        Handler fileHandler  = null;
+
+        //Assigning handlers to LOGGER object
+        try {
+            fileHandler = new FileHandler("./logFile.log");
+            lg.addHandler(fileHandler);
+
+        } catch(IOException exception){
+        lg.log(Level.SEVERE, "Error occur in FileHandler.", exception);
+        }
+
+
+
+    Scanner sc = new Scanner(System.in);
+
+        lg.log(Level.ALL, "Enter tsv file directory: ");
+        lg.info("Enter tsv file directory: ");
+
+        String tsvDir = sc.nextLine();
+        lg.log(Level.ALL, "The file path is : " + tsvDir);
+
+        File f = new File(tsvDir);
+        fileName = f.getName();
+
+        final Float[][] points = tsvToArray(tsvDir);
 
         if (points == null) {
-            System.out.println("Array is null");
+            lg.log(Level.ALL, "Array is null");
+            lg.warning("Array is null");
             return;
         }
 
@@ -190,7 +222,7 @@ public class TaskManager implements Comparator<Point2D.Float> {
 
             for (int i = 0; i < points2D.length; i++) {
 
-                int finalI = i;
+                final int finalI = i;
                 points2D[i] = new Point2D() {
                     @Override
                     public double getX() {
@@ -223,14 +255,39 @@ public class TaskManager implements Comparator<Point2D.Float> {
                 }
             }
 
-            System.out.println("best points: " + "\nRow " + (row1 + 1 ) + ": " + closest.either().getX() + ", " + closest.either().getY()
+            String result = ("best points: " + "\nRow " + (row1 + 1 ) + ": " + closest.either().getX() + ", " + closest.either().getY()
                     + "\nRow " + (row2 + 1) + ": " + closest.other().getX() + ", " + closest.other().getY());
+
+            lg.log(Level.ALL, result);
+            lg.info(result);
+
+            try {
+                writeToFile(result);
+
+                lg.log(Level.FINE, "The results are saved in a file named: " + fileName + "_result");
+                lg.info("The results are saved in a file named: " + fileName + "_result");
+
+            } catch (IOException e) {
+
+                lg.log(Level.SEVERE, "File could not be saved.");
+                lg.info("File could not be saved.");
+                lg.log(Level.SEVERE, String.valueOf(e.fillInStackTrace()));
+            }
+
         }
 
         else {
 
             bruteForceClosest(points, arraySize);
         }
+    }
+
+    public static void writeToFile(String s)
+            throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName + "_result"));
+        writer.write(s);
+
+        writer.close();
     }
 
     public static Float[][] tsvToArray(String tsvFileAddress) {
@@ -268,7 +325,7 @@ public class TaskManager implements Comparator<Point2D.Float> {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            lg.log(Level.SEVERE, String.valueOf(e.fillInStackTrace()));
         }
 
 
@@ -339,9 +396,26 @@ public class TaskManager implements Comparator<Point2D.Float> {
             secondPoint += arr[bestMultiPoint2][i] + ", ";
 
         }
-        System.out.println("best points: " + "\nRow " + (bestMultiPoint1 + 1) + ": " + firstPoint +
+
+        String result = ("best points: " + "\nRow " + (bestMultiPoint1 + 1) + ": " + firstPoint +
                 "\nRow " + (bestMultiPoint2 + 1) + ": " + secondPoint);
 
+        lg.log(Level.FINE, result);
+        lg.info(result);
+
+        try {
+            writeToFile(result);
+
+            lg.log(Level.FINE, "The results are saved in a file named: " + fileName + "_result");
+            lg.info("The results are saved in a file named: " + fileName + "_result");
+
+        } catch (IOException e) {
+
+            lg.log(Level.SEVERE, "File could not be saved.");
+            lg.info("File could not be saved.");
+
+            lg.log(Level.SEVERE, String.valueOf(e.fillInStackTrace()));
+        }
     }
 
 }
