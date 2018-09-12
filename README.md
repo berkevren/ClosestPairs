@@ -24,4 +24,3 @@ The input file must be a .tsv file.
 
 # Logging
 All the information on the console and any possible errors are logged in a logging file with the name logFile.log in the directory of the program. The results are written to a file named FILENAME_result where the FILENAME corresponds to the name of the input file.
-If you can't open the output file, change the output file extention to .txt
