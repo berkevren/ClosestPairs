@@ -2,4 +2,5 @@
 *.idea
 #ignore log files
 *.log
+*.class
 Comments.txt
