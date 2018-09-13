@@ -1,7 +1,5 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Level;
 
 public class ClosestPointFinder {
 
@@ -19,6 +17,14 @@ public class ClosestPointFinder {
         this.pointDistanceCalculator = new PointDistanceCalculator();
         this.bestPoint1 = null;
         this.bestPoint2 = null;
+    }
+
+    public Point getBestPoint1() {
+        return bestPoint1;
+    }
+
+    public Point getBestPoint2() {
+        return bestPoint2;
     }
 
     public void findClosestPoints() {

@@ -56,7 +56,7 @@ public class Point implements Comparator<Point> {
 
         for(int i = 0; i < getCoordinates().size(); i++) {
 
-            if(!(this.getCoordinates().get(i) == p.getCoordinates().get(i))) {
+            if(!(this.getSingleCoordinate(i) == p.getSingleCoordinate(i).floatValue())) {
                 return false;
             }
         }

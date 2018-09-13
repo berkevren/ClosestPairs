@@ -22,7 +22,6 @@ public class TSVReader {
 
         try (BufferedReader br = new BufferedReader(new FileReader(tsvFileAddress))) {
 
-
             String[] pointsStringByLine;
             ArrayList<Float> pointsInSingleLineAsFloat;
             int originalIndex = 0;

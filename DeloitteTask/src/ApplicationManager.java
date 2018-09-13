@@ -1,8 +1,6 @@
-import javax.swing.plaf.synth.SynthTextAreaUI;
-import java.awt.geom.Point2D;
-import java.io.File;
+import org.junit.runner.Result;
+
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -59,5 +57,15 @@ public class ApplicationManager {
         ClosestPointFinder closestPointFinder = new ClosestPointFinder(pointsArrayList);
         closestPointFinder.findClosestPoints();
         tsvReader.writeToFile(closestPointFinder.toString());
+    }
+
+    public static String resultStateToString(Result result) {
+
+        if (result.wasSuccessful()) {
+            return "Test was successful";
+        }
+
+        return "Test failed";
+
     }
 }
