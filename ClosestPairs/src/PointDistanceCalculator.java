@@ -1,3 +1,5 @@
+import java.util.logging.Level;
+
 public class PointDistanceCalculator {
 
     private Point point1, point2;
@@ -44,8 +46,10 @@ public class PointDistanceCalculator {
 
     public String toString() {
 
-        return "The distance between Point: " + point1.getOriginalIndex() + " and " +
+        String stringToReturn = "The distance between Point: " + point1.getOriginalIndex() + " and " +
                 point2.getOriginalIndex() + " is " + this.calculateDistance();
+        ApplicationManager.applicationManager.getLogger().log(Level.ALL, stringToReturn);
+        return stringToReturn;
 
     }
 

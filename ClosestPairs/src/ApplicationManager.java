@@ -11,14 +11,15 @@ public class ApplicationManager {
     public static Logger logger;
 
     public static ApplicationManager applicationManager;
+    public ArrayList<Point> arrayListFromUser;
+    public TSVReader tsvReader = null;
+    public ClosestPointFinder closestPointFinder = null;
 
     public ApplicationManager() {
 
-        logger = Logger.getLogger(ApplicationManager.class.getName());
+        logger = Logger.getLogger("ClosestPairLogger");
+        Handler fileHandler;
 
-        Handler fileHandler  = null;
-
-        //Assigning handlers to LOGGER object
         try {
             fileHandler = new FileHandler("./logFile.log");
             logger.addHandler(fileHandler);
@@ -35,28 +36,13 @@ public class ApplicationManager {
 
     public static void main(String[] args) {
 
-        Scanner scan = new Scanner(System.in);
-
         applicationManager = new ApplicationManager();
+        applicationManager.formArrayListFromDirectory();
 
-        applicationManager.logger.log(Level.ALL, "Enter tsv file directory: ");
-        applicationManager.logger.info("Enter tsv file directory: ");
-
-        String tsvDir = scan.nextLine();
-        applicationManager.logger.log(Level.ALL, "The file path is : " + tsvDir);
-
-        TSVReader tsvReader = new TSVReader(tsvDir);
-        ArrayList<Point> pointsArrayList = tsvReader.tsvToArrayList();
-
-        if (pointsArrayList == null) {
-            applicationManager.logger.log(Level.ALL, "Array is null");
-            applicationManager.logger.warning("Array is null");
-            return;
+        if (applicationManager.arrayListFormedFromDirectoryIsValid()) {
+            applicationManager.findTheClosestPairInArrayList();
+            applicationManager.tsvReader.writeToFile(applicationManager.closestPointFinder.toString());
         }
-
-        ClosestPointFinder closestPointFinder = new ClosestPointFinder(pointsArrayList);
-        closestPointFinder.findClosestPoints();
-        tsvReader.writeToFile(closestPointFinder.toString());
     }
 
     public static String resultStateToString(Result result) {
@@ -67,5 +53,44 @@ public class ApplicationManager {
 
         return "Test failed";
 
+    }
+
+    public void logArrayIsNullError() {
+        logger.log(Level.ALL, "Array is null");
+        logger.warning("Array is null");
+    }
+
+    public void logTSVFileDirectoryRequest() {
+        logger.log(Level.ALL, "Enter tsv file directory: ");
+        logger.info("Enter tsv file directory: ");
+    }
+
+    public void formArrayListFromDirectory() {
+        tsvReader = new TSVReader(getTSVFileDirectoryFromUser());
+        arrayListFromUser = tsvReader.tsvToArrayList();
+    }
+
+    public String getTSVFileDirectoryFromUser() {
+
+        Scanner scan = new Scanner(System.in);
+        logTSVFileDirectoryRequest();
+
+        String tsvDir = scan.nextLine();
+        logger.log(Level.ALL, "The file path is : " + tsvDir);
+
+        return tsvDir;
+    }
+
+    public boolean arrayListFormedFromDirectoryIsValid() {
+        if (arrayListFromUser == null) {
+            logArrayIsNullError();
+            return false;
+        }
+        return true;
+    }
+
+    public void findTheClosestPairInArrayList() {
+        closestPointFinder = new ClosestPointFinder(arrayListFromUser);
+        closestPointFinder.findClosestPoints();
     }
 }

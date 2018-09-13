@@ -3,6 +3,7 @@
 #ignore log files
 *.log
 *.class
+*.tsv_result
 Comments.txt
 ClosestPairs/DeloitteTask/src/sample_input_100_100.tsv_result.txt
 ClosestPairs/sample_input_2_4.tsv_result

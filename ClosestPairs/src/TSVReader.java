@@ -20,6 +20,9 @@ public class TSVReader {
     }
     public ArrayList<Point> tsvToArrayList() {
 
+        if (!(this.containsAtLeastOneLine()))
+            return null;
+
         try (BufferedReader br = new BufferedReader(new FileReader(tsvFileAddress))) {
 
             String[] pointsStringByLine;
@@ -45,6 +48,28 @@ public class TSVReader {
         }
 
         return allPointsInTSVFile;
+
+    }
+
+    public boolean containsAtLeastOneLine() {
+
+        try (BufferedReader br = new BufferedReader(new FileReader(tsvFileAddress))) {
+
+            String firstLine = "";
+            nextLine = br.readLine();
+            firstLine = nextLine.split(tsvSplitBy)[0];
+
+            if (firstLine == "") {
+                ApplicationManager.applicationManager.logger.log(Level.SEVERE, "File is empty");
+                return false;
+            }
+            return true;
+
+        } catch (IOException e) {
+        ApplicationManager.applicationManager.logger.log(Level.SEVERE, String.valueOf(e.fillInStackTrace()));
+    }
+
+    return false;
 
     }
 

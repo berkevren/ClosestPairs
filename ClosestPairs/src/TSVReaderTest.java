@@ -22,6 +22,20 @@ public class TSVReaderTest {
 
     }
 
+    @Test
+    public void testEmptyFileAsInput() {
+
+        String tsvFileAddressForTest = "/Users/berkabbasoglu/Documents/Programs/ClosestPairs/" +
+                "DeloitteTask/sample_in_out/empty.tsv";
+        TSVReader tsvReader = new TSVReader(tsvFileAddressForTest);
+        ArrayList<Point> pointsArrayList = tsvReader.tsvToArrayList();
+
+        for (Point point: pointsArrayList) {
+            assertTrue(point.equals(generateArrayListForTest().get(point.getOriginalIndex())));
+        }
+
+    }
+
     public ArrayList<Point> generateArrayListForTest() {
 
         ArrayList<Point> pointsArrayList = new ArrayList<Point>();

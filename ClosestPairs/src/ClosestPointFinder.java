@@ -6,8 +6,9 @@ public class ClosestPointFinder {
     private ArrayList<Point> initialPointArray;
     private int iteration;
     private PointDistanceCalculator pointDistanceCalculator;
-    private double bestDistance = Double.POSITIVE_INFINITY;
-    private Point bestPoint1, bestPoint2;
+    private double closestDistance = Double.POSITIVE_INFINITY;
+    private double closestDistanceSoFar;
+    private Point closestPair1, closestPair2;
 
 
     public ClosestPointFinder(ArrayList<Point> initialPointArray) {
@@ -15,28 +16,28 @@ public class ClosestPointFinder {
         this.initialPointArray = initialPointArray;
         this.iteration = 0;
         this.pointDistanceCalculator = new PointDistanceCalculator();
-        this.bestPoint1 = null;
-        this.bestPoint2 = null;
+        this.closestPair1 = null;
+        this.closestPair2 = null;
     }
 
     public Point getBestPoint1() {
-        return bestPoint1;
+        return closestPair1;
     }
 
     public Point getBestPoint2() {
-        return bestPoint2;
+        return closestPair2;
     }
 
     public void findClosestPoints() {
 
         if (initialPointArray.get(0).getCoordinates().size() < 3) {
             this.sortAccordingToIteration();
-            findClosestPointsTwoDimensions(initialPointArray, initialPointArray, initialPointArray,
+            findClosestPointsWithinHalvesTwoDimensions(initialPointArray, initialPointArray, initialPointArray,
                     0, initialPointArray.size());
         }
 
         else {
-            calculateClosestBruteForce(initialPointArray);
+            calculateClosestBruteForce();
         }
 
         return;
@@ -88,9 +89,9 @@ public class ClosestPointFinder {
         iteration++;
     }
 
-    public double findClosestPointsTwoDimensions(ArrayList<Point> pointsSortedByFirstCoordinate,
+    public double findClosestPointsWithinHalvesTwoDimensions(ArrayList<Point> pointsSortedByFirstCoordinate,
                                     ArrayList<Point> getPointsSortedBySecondCoordinate,
-                                    ArrayList<Point> auxillary,
+                                    ArrayList<Point> auxiliary,
                                     int lowEnd, int highEnd) {
 
         if (highEnd <= lowEnd) {
@@ -100,48 +101,51 @@ public class ClosestPointFinder {
         int middle = lowEnd + (highEnd - lowEnd) / 2;
         Point medianPoint = pointsSortedByFirstCoordinate.get(middle);
 
-        double closestPair1 = findClosestPointsTwoDimensions(pointsSortedByFirstCoordinate,
-                getPointsSortedBySecondCoordinate, auxillary, lowEnd, middle);
-        double closestPair2 = findClosestPointsTwoDimensions(pointsSortedByFirstCoordinate,
-                getPointsSortedBySecondCoordinate, auxillary, middle+1, highEnd);
-        double closestPairReal = Math.min(closestPair1, closestPair2);
+        double closestDistanceFromFirstHalf = findClosestPointsWithinHalvesTwoDimensions(pointsSortedByFirstCoordinate,
+                getPointsSortedBySecondCoordinate, auxiliary, lowEnd, middle);
+        double closestDistanceFromSecondHalf = findClosestPointsWithinHalvesTwoDimensions(pointsSortedByFirstCoordinate,
+                getPointsSortedBySecondCoordinate, auxiliary, middle+1, highEnd);
+        double closestPairReal = Math.min(closestDistanceFromFirstHalf, closestDistanceFromSecondHalf);
 
-        mergePointLists(getPointsSortedBySecondCoordinate, auxillary, lowEnd, middle, highEnd);
+        mergePointLists(getPointsSortedBySecondCoordinate, auxiliary, lowEnd, middle, highEnd);
+
+        return findClosestPointsBetweenHalvesTwoDimensions(getPointsSortedBySecondCoordinate, auxiliary, lowEnd, highEnd,
+                closestPairReal, medianPoint);
+    }
+
+    public double findClosestPointsBetweenHalvesTwoDimensions(ArrayList<Point> getPointsSortedBySecondCoordinate,
+                                                              ArrayList<Point> auxiliary, int lowEnd, int highEnd,
+                                                              double closestPairReal, Point medianPoint) {
 
         int closerThanClosestPair = 0;
         for (int i = lowEnd; i < highEnd; i++) {
             if (Math.abs(getPointsSortedBySecondCoordinate.get(i).getSingleCoordinate(iteration-1)) -
                     medianPoint.getSingleCoordinate(iteration-1) < closestPairReal)
-                auxillary.set(closerThanClosestPair++, getPointsSortedBySecondCoordinate.get(i));
+                auxiliary.set(closerThanClosestPair++, getPointsSortedBySecondCoordinate.get(i));
         }
 
         for (int i = 0; i < closerThanClosestPair; i++) { // this runs at most 7 times
 
             for (int j = i+1; (j < closerThanClosestPair) &&
-                    (auxillary.get(j).getSingleCoordinate(iteration) - auxillary.get(i).getSingleCoordinate(iteration)
+                    (auxiliary.get(j).getSingleCoordinate(iteration) - auxiliary.get(i).getSingleCoordinate(iteration)
                             < closestPairReal); j++) {
 
-                pointDistanceCalculator.setPoint1(auxillary.get(i));
-                pointDistanceCalculator.setPoint2(auxillary.get(j));
+                pointDistanceCalculator.setPoint1(auxiliary.get(i));
+                pointDistanceCalculator.setPoint2(auxiliary.get(j));
                 double distanceBetweenThePoints = pointDistanceCalculator.calculateDistance();
-                System.out.println(pointDistanceCalculator.toString());
 
                 if (distanceBetweenThePoints < closestPairReal) {
                     closestPairReal = distanceBetweenThePoints;
 
-                    if (distanceBetweenThePoints < bestDistance) {
-                        bestDistance = distanceBetweenThePoints;
-                        bestPoint1 = auxillary.get(i);
-                        bestPoint2 = auxillary.get(j);
+                    if (distanceBetweenThePoints < closestDistance) {
+                        closestDistance = distanceBetweenThePoints;
+                        closestPair1 = auxiliary.get(i);
+                        closestPair2 = auxiliary.get(j);
                     }
                 }
             }
-
         }
-
         return closestPairReal;
-
-
     }
 
     public void mergePointLists(ArrayList<Point> pointsSortedBySecondCoordinate,
@@ -167,36 +171,31 @@ public class ClosestPointFinder {
     }
 
     public String toString() {
-
-        return ("best points: " + "\n" + bestPoint1.toString() +
-                "\n" + bestPoint2.toString());
-
+        return ("best points: " + "\n" + closestPair1.toString() +
+                "\n" + closestPair2.toString());
     }
 
 
-    public void calculateClosestBruteForce(ArrayList<Point> points) {
+    public void calculateClosestBruteForce() {
 
-        double closestDistanceSoFar;
-        double closestDistance = Double.POSITIVE_INFINITY;
+        for (int i = 0; i < initialPointArray.size(); i++) {
+            pointDistanceCalculator.setPoint1(initialPointArray.get(i));
 
-        for (int i = 0; i < points.size(); i++) {
-            pointDistanceCalculator.setPoint1(points.get(i));
+            for (int j = i+1; j < initialPointArray.size(); j++) {
 
-            for (int j = i+1; j < points.size(); j++) {
-
-                pointDistanceCalculator.setPoint2(points.get(j));
+                pointDistanceCalculator.setPoint2(initialPointArray.get(j));
                 closestDistanceSoFar = pointDistanceCalculator.calculateDistance();
 
-                if (closestDistanceSoFar < closestDistance) {
-                    closestDistance = closestDistanceSoFar;
-
-                    bestPoint1 = points.get(i);
-                    bestPoint2 = points.get(j);
-
-                }
-
-                //System.out.println(pointDistanceCalculator.toString());
+                updateClosestPairs(i, j);
             }
+        }
+    }
+
+    public void updateClosestPairs(int closestPairCandidate1, int closestPairCadidate2) {
+        if (closestDistanceSoFar < closestDistance) {
+            closestDistance = closestDistanceSoFar;
+            closestPair1 = initialPointArray.get(closestPairCandidate1);
+            closestPair2 = initialPointArray.get(closestPairCadidate2);
         }
     }
 }
