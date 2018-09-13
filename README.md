@@ -11,9 +11,11 @@ For all other dimensions, the running time is O(n^2m) where n is the number of l
 # How To Run
 To run the program, navigate to the directory of the file in terminal. Then use
 
+
 javac ApplicationManager.java
 
 java ApplicationManager
+
 
 The first line will compile the file and the second line will run the program.
 
