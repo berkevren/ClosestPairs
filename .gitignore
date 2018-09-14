@@ -4,4 +4,12 @@
 *.log
 *.class
 *.tsv_result
-ClosestPairs/target
+*.DS_Store
+target
+out
+out/production
+out/production/main
+out/production/main/com
+out/production/main/com/deloitte
+out/production/main/com/deloitte/yusp
+out/production/main/com/deloitte/yusp

@@ -57,19 +57,19 @@ public class TSVReader {
 
         try (BufferedReader br = new BufferedReader(new FileReader(tsvFileAddress))) {
 
-            String firstLine = "";
-            nextLine = br.readLine();
-            firstLine = nextLine.split(tsvSplitBy)[0];
 
-            if (firstLine == "") {
-                ApplicationManager.applicationManager.logger.log(Level.SEVERE, "File is empty");
+            nextLine = br.readLine();
+
+            if (nextLine == null) {
+                ApplicationManager.applicationManager.getLogger().log(Level.SEVERE, "File is empty");
                 return false;
             }
             return true;
 
         } catch (IOException e) {
-        ApplicationManager.applicationManager.logger.log(Level.SEVERE, String.valueOf(e.fillInStackTrace()));
-    }
+            if (ApplicationManager.applicationManager.getLogger() == null)
+            ApplicationManager.applicationManager.getLogger().log(Level.SEVERE, e.getMessage());
+        }
 
     return false;
 

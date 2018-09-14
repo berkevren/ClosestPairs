@@ -26,7 +26,7 @@ public class ApplicationManager {
             logger.addHandler(fileHandler);
 
         } catch(IOException exception){
-            logger.log(Level.SEVERE, "Error occur in FileHandler.", exception);
+            logger.log(Level.SEVERE, "Error occurred in FileHandler.", exception);
         }
 
     }
@@ -83,7 +83,7 @@ public class ApplicationManager {
     }
 
     public boolean arrayListFormedFromDirectoryIsValid() {
-        if (arrayListFromUser == null) {
+        if (arrayListFromUser == null || arrayListFromUser.size() == 0) {
             logArrayIsNullError();
             return false;
         }

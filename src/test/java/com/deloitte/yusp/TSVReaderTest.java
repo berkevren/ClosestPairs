@@ -3,6 +3,8 @@ package com.deloitte.yusp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class TSVReaderTest {
@@ -10,29 +12,24 @@ public class TSVReaderTest {
     @org.junit.Test
     public void tsvToArrayList() {
 
-        String tsvFileAddressForTest = "/Users/berkabbasoglu/Documents/Programs/ClosestPairs/ClosestPairs/sample_in_out/sample_input_2_4.tsv";
+        String tsvFileAddressForTest = "sample_in_out/sample_input_2_4.tsv";
         TSVReader tsvReader = new TSVReader(tsvFileAddressForTest);
         ArrayList<Point> pointsArrayList = tsvReader.tsvToArrayList();
 
         for (Point point: pointsArrayList) {
             assertTrue(point.equals(generateArrayListForTest().get(point.getOriginalIndex())));
         }
-
-
     }
 
     
     @Test
     public void testEmptyFileAsInput() {
 
-        String tsvFileAddressForTest = "/Users/berkabbasoglu/Documents/Programs/ClosestPairs/ClosestPairs/sample_in_out/empty.tsv";
-        TSVReader tsvReader = new TSVReader(tsvFileAddressForTest);
-        ArrayList<Point> pointsArrayList = tsvReader.tsvToArrayList();
+        ApplicationManager applicationManager = new ApplicationManager();
+        String tsvFileAddressForTest = "sample_in_out/empty.tsv";
+        applicationManager.tsvReader = new TSVReader(tsvFileAddressForTest);
 
-        for (Point point: pointsArrayList) {
-            assertTrue(pointsArrayList.get(0) == null);
-        }
-
+        assertTrue(!(applicationManager.arrayListFormedFromDirectoryIsValid()));
     }
 
     public ArrayList<Point> generateArrayListForTest() {
