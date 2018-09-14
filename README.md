@@ -11,17 +11,21 @@ There is a special case for points in two dimensions where the running time is O
 For all other dimensions, the running time is O(n^2d) where n is the number of lines and d is the number of dimensions.
 
 # How To Run
-To run the program, navigate to the directory of the file in terminal. Then use
+To run the program, navigate to the directory of the file in terminal. Then use:
 
+```
+mvn compile
+mvn exec:java -Dexec.mainClass="com.deloitte.yusp.ApplicationManager"
+```
 
-javac ApplicationManager.java
+The first line will compile the file and the second line will run the program. 
+To use, the address of the file should be given as input to the program. The result will be outputted in an output file with the same name as the input file + "_result".
 
-java ApplicationManager
+To run the tests, use:
 
-
-The first line will compile the file and the second line will run the program.
-
-To use, the address of the file should be given as input to the program.
+```
+mvn test
+```
 
 # Limitations
 The program assumes there are no blank lines, all values are separated by tabs and the points are 1 dimensional or higher.It is also assumed all lines have the same number of values, i.e each Point has the same dimension. Empty files might cause errors. There is no high end on the number of dimensions. The highest number of tested lines were 1000 and the highest number of dimensions tested was 100.
