@@ -1,3 +1,5 @@
+package main.java;
+
 import org.junit.runner.Result;
 import java.io.IOException;
 import java.util.*;
@@ -20,7 +22,7 @@ public class ApplicationManager {
         Handler fileHandler;
 
         try {
-            fileHandler = new FileHandler("./logFile.log");
+            fileHandler = new FileHandler("logFile.log");
             logger.addHandler(fileHandler);
 
         } catch(IOException exception){

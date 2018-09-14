@@ -1,8 +1,12 @@
+package test;
+
+import main.java.Point;
+import main.java.PointDistanceCalculator;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertEquals;
 
 public class PointDistanceCalculatorTest {
 

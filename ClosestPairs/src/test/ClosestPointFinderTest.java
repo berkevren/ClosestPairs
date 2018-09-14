@@ -1,9 +1,13 @@
+package test;
+
+import main.java.ClosestPointFinder;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import main.java.Point;
+
 
 public class ClosestPointFinderTest {
 

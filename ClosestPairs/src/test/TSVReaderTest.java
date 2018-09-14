@@ -1,5 +1,10 @@
+package test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import main.java.Point;
+import main.java.TSVReader;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
