@@ -1,4 +1,4 @@
-package main.java;
+package com.deloitte.yusp;
 
 import org.junit.runner.Result;
 import java.io.IOException;

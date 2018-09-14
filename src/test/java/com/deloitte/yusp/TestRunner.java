@@ -1,6 +1,5 @@
-package test;
+package com.deloitte.yusp;
 
-import main.java.ApplicationManager;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;

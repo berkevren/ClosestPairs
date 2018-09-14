@@ -1,7 +1,5 @@
-package test;
+package com.deloitte.yusp;
 
-import main.java.Point;
-import main.java.PointDistanceCalculator;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
