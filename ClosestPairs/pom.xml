@@ -21,9 +21,7 @@
 	     </plugins>
 	</build>
 
-	<properties>
-		<exec.mainClass>main.java.ApplicationManager</exec.mainClass>
-	</properties>
+
 
 	<dependencies>
 		<dependency>
